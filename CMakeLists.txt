@@ -54,15 +54,6 @@ if(POLICY CMP0099)
     cmake_policy(SET CMP0099 NEW)
 endif()
 
-# Assume MSVC projects don't have a package manager and need vendored dependencies (by default).
-# Most other platforms have some kind of package manager.
-# FIXME: consider a package manager such as conan/vcpkg instead of vendoring
-if(ANDROID OR MSVC)
-    set(vendored_default ON)
-else()
-    set(vendored_default OFF)
-endif()
-
 set(sdl2mixer_install_enableable ON)
 if ((TARGET SDL2 OR TARGET SDL2-static) AND SDL2_DISABLE_INSTALL)
     # Cannot install SDL2_mixer when SDL2 is built in same built, and is not installed.
@@ -89,7 +80,7 @@ set(SDL2MIXER_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 
 cmake_dependent_option(SDL2MIXER_INSTALL "Enable SDL2mixer install target" ${SDL2MIXER_ROOTPROJECT} "${sdl2mixer_install_enableable}" OFF)
 option(SDL2MIXER_DEPS_SHARED "Default value for loading dependencies dynamically" ON)
-option(SDL2MIXER_VENDORED "Use vendored third-party libraries" ${vendored_default})
+option(SDL2MIXER_VENDORED "Use vendored third-party libraries" OFF)
 
 option(SDL2MIXER_SAMPLES "Build the SDL2_mixer sample program(s)" ${SDL2MIXER_SAMPLES_DEFAULT})
 cmake_dependent_option(SDL2MIXER_SAMPLES_INSTALL "Install the SDL2_mixer sample program(s)" OFF "SDL2MIXER_SAMPLES;SDL2MIXER_INSTALL" OFF)
